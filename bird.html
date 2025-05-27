@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forest Tale - A Story of Change</title>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  
+  <style>
+    /* Reset and basics */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Merriweather', serif;
+      background: linear-gradient(135deg, #f0f7f5, #d4e6e4);
+      color: #3c4a49;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      user-select: none;
+    }
+
+    /* Utility */
+    .center-flex {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Landing Page */
+    #landing {
+      height: 100vh;
+      background: linear-gradient(135deg, #eaf7f5, #b7d9d6);
+      flex-direction: column;
+      text-align: center;
+      padding: 0 1rem;
+      transition: opacity 0.7s ease;
+      user-select: text;
+    }
+    #landing h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 5rem;
+      margin: 0 0 1rem 0;
+      color: #4a8c82;
+      text-shadow: 0 0 20px rgba(74, 140, 130, 0.45);
+    }
+    #landing p {
+      font-size: 1.2rem;
+      margin: 0 0 3rem 0;
+      color: #567f7a;
+      max-width: 450px;
+    }
+    #landing button {
+      background: linear-gradient(135deg, #55b09a, #2f7a72);
+      border: none;
+      padding: 18px 60px;
+      font-size: 24px;
+      font-weight: 700;
+      border-radius: 12px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(47, 122, 114, 0.5);
+      transition: all 0.3s ease;
+      font-family: 'Merriweather', serif;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+    }
+    #landing button::before {
+      content: "";
+      position: absolute;
+      top: 0; left: -75%;
+      width: 50%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.35);
+      transform: skewX(-25deg);
+      transition: left 0.5s ease;
+      pointer-events: none;
+    }
+    #landing button:hover::before {
+      left: 125%;
+    }
+    #landing button:hover,
+    #landing button:focus {
+      background: linear-gradient(135deg, #2f7a72, #55b09a);
+      transform: scale(1.1);
+      box-shadow: 0 12px 32px rgba(47, 122, 114, 0.8);
+      outline: none;
+      z-index: 1;
+    }
+
+    /* Main app container */
+    #app {
+      display: none;
+      flex-direction: column;
+      padding: 60px 30px;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f0f7f5, #d4e6e4);
+      align-items: center;
+      transition: opacity 0.7s ease;
+    }
+    
+    /* Paper styling */
+    .paper {
+      position: relative;
+      background: #fffefb;
+      max-width: 900px;
+      width: 90%;
+      min-height: 75vh;
+      padding: 80px 60px 60px 60px;
+      border-radius: 36px;
+      box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.09),
+        inset 0 0 80px 20px rgba(230, 245, 243, 0.95);
+      border: 3px solid #a7d0cb;
+      font-size: 1.35rem;
+      line-height: 2.05;
+      color: #2c3e3a;
+      font-weight: 500;
+      user-select: text;
+      font-style: italic;
+      text-align: justify;
+      letter-spacing: 0.035em;
+      background-image:
+        url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+      background-repeat: repeat;
+      background-size: auto 120px;
+      animation: fadeInUp 1.2s ease forwards;
+      opacity: 0;
+    }
+
+    /* Story Title */
+    #story-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3.6rem;
+      color: #4a8c82;
+      margin-bottom: 2rem;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(74, 140, 130, 0.5);
+      user-select: text;
+    }
+
+    /* Text container */
+    #output {
+      white-space: pre-wrap;
+      font-family: 'Merriweather', serif;
+      letter-spacing: 0.03em;
+      text-indent: 2em;
+      text-align: justify;
+      color: #2c3e3a;
+      line-height: 2;
+    }
+
+    /* Animated drop cap */
+    #output::first-letter {
+      font-size: 3.5rem;
+      font-weight: 700;
+      float: left;
+      line-height: 1;
+      margin-right: 0.3em;
+      font-family: 'Great Vibes', cursive;
+      color: #4a8c82;
+      text-shadow: 0 1px 1px rgba(0,0,0,0.15);
+      animation: dropCapBounce 1.3s ease forwards;
+      user-select: text;
+    }
+
+    /* Subtle shine effect on the paper */
+    .paper::before {
+      content: "";
+      position: absolute;
+      top: -30px;
+      left: -40px;
+      width: 120%;
+      height: 30px;
+      background: linear-gradient(120deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 70%);
+      transform: skewX(-25deg);
+      border-radius: 12px;
+      pointer-events: none;
+      animation: shineMove 5s linear infinite;
+      opacity: 0.8;
+      z-index: 2;
+    }
+
+    /* FadeInUp animation */
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Drop cap bounce */
+    @keyframes dropCapBounce {
+      0% {
+        transform: translateY(-30px);
+        opacity: 0;
+      }
+      60% {
+        transform: translateY(10px);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    /* Shining effect animation */
+    @keyframes shineMove {
+      0% {
+        left: -40%;
+      }
+      100% {
+        left: 120%;
+      }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .paper {
+        font-size: 1.1rem;
+        padding: 60px 40px 40px 40px;
+        min-height: 65vh;
+        border-radius: 24px;
+      }
+      #story-title {
+        font-size: 2.8rem;
+      }
+      #landing h1 {
+        font-size: 3.6rem;
+      }
+      #landing p {
+        font-size: 1rem;
+      }
+      #landing button {
+        font-size: 20px;
+        padding: 14px 40px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .paper {
+        font-size: 1rem;
+        padding: 40px 25px 25px 25px;
+        min-height: 60vh;
+      }
+      #story-title {
+        font-size: 2.2rem;
+      }
+      #landing h1 {
+        font-size: 2.6rem;
+      }
+      #landing p {
+        font-size: 0.9rem;
+      }
+      #landing button {
+        font-size: 18px;
+        padding: 12px 30px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Landing Page -->
+  <div id="landing" class="center-flex" role="region" aria-label="Welcome screen with story introduction">
+    <div>
+      <h1>Forest Tale</h1>
+      <p>A story of change, faith, and hope</p>
+      <button aria-label="Enter the story" onclick="enterApp()">Enter Story</button>
+    </div>
+  </div>
+
+  <!-- Main App Page -->
+  <div id="app" class="center-flex" tabindex="-1" aria-live="polite" aria-label="Forest tale story content">
+    <article class="paper" role="main" aria-labelledby="story-title">
+      <h2 id="story-title">The Little Bird’s Change</h2>
+      <div id="output" aria-label="Story text"></div>
+    </article>
+  </div>
+
+  <script>
+    const storyText = `
+In a forest lived a little bird who cared only about having fun and her own beauty. Her mother often said,
+“Come, my child, pray…”
+but the little bird didn’t listen.
+
+One night, the mother had a dream where an angel appeared and said,
+“Take your child to church on Easter night. Pray and offer gifts, and your child will change.”
+
+The mother took the little bird. They prayed a lot. Suddenly, the priest’s strong voice rang out:
+“Christ is risen!”
+At that moment, warmth filled the little bird’s heart. With tears in her eyes, she said,
+“Truly, He is risen!”
+
+From that day, the little bird changed. She prayed often and went to church.
+    `.trim();
+
+    function enterApp() {
+      const landing = document.getElementById('landing');
+      const app = document.getElementById('app');
+      const output = document.getElementById('output');
+
+      // fade out landing
+      landing.style.opacity = '0';
+      setTimeout(() => {
+        landing.style.display = 'none';
+        app.style.display = 'flex';
+        app.style.opacity = '0';
+        output.textContent = storyText;
+        app.focus(); // accessibility focus on content container
+
+        setTimeout(() => {
+          app.style.opacity = '1';
+        }, 50);
+      }, 700);
+    }
+  </script>
+
+</body>
+</html>
+
